@@ -1,0 +1,6 @@
+.vs/ProjectSettings.json
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/cnpz-kafka/v17/.suo
+cnpz-kafka/bin/
+cnpz-kafka/obj/
