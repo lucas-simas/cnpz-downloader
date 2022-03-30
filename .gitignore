@@ -46,3 +46,4 @@ obj/Release/net6.0/cnpz-downloader.GlobalUsings.g.cs
 /out
 /obj/Release/net6.0
 /bin/Release/net6.0
+/Docker/Dockerfile.cs
