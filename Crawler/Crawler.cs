@@ -62,15 +62,6 @@ namespace cnpz_downloader.Crawler
 			Producer.SendKafka("downloader", pasta_nome);
 		}
 
-        public void Extract(object sender, AsyncCompletedEventArgs e, string url)
-        {
-            Console.WriteLine($"{url} - Arquivo baixado.");
-        }
-        public void ProgessChanged(object sender, DownloadProgressChangedEventArgs e, string url)
-        {
-            Console.WriteLine($"Situação - {url}: {e.ProgressPercentage}%.");
-        }
-
     }
 
 }
