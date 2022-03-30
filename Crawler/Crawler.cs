@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System;
 using System.IO;
 using cnpz_downloader.FileDownloader;
+using cnpz_kafka.GenericKafka;
 
 namespace cnpz_downloader.Crawler
 {
@@ -18,6 +19,7 @@ namespace cnpz_downloader.Crawler
             var links = doc.DocumentNode.SelectNodes("//a[@href]");
             var regex_download = new Regex(@"(\S*)\.(\S*)\.(D\w*)\.(\S*).((.zip)|(.ZIP))");
             var pasta_criada = false;
+            string pasta_nome = "";
             List<Task> tasks = new List<Task>();
 
             foreach (var link in links) {
@@ -31,6 +33,7 @@ namespace cnpz_downloader.Crawler
 						if ( !pasta_criada && reg_info.Count > 0 && reg_info[0].Groups.Count > 3 ) {
                             var grupos = reg_info[0].Groups;
                             var agrupador = reg_info[0].Groups[3].Value;
+                            pasta_nome = agrupador;
                             path += agrupador + @"\";
 
                             if ( !Directory.Exists(path) ) {
@@ -42,8 +45,8 @@ namespace cnpz_downloader.Crawler
                         Console.WriteLine("Iniciou: " + url + link.Attributes["href"].Value + " - Salvando: " + path);
                         var arquivo_atual = url + link.Attributes["href"].Value;
 
-                        //var fw = new FileDownload(arquivo_atual, path + link.Attributes["href"].Value, 20000);
-                        //tasks.Add(fw.Start());
+                        var fd = new FileDownload(arquivo_atual, path + link.Attributes["href"].Value, 20000);
+                        tasks.Add(fd.Start());
                     }
 
                 }
@@ -56,7 +59,8 @@ namespace cnpz_downloader.Crawler
 
             await Task.WhenAll(tasks);
 
-        }
+			Producer.SendKafka("downloader", pasta_nome);
+		}
 
         public void Extract(object sender, AsyncCompletedEventArgs e, string url)
         {

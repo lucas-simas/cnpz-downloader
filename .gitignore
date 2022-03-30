@@ -42,3 +42,4 @@ obj/Release/net6.0/cnpz-downloader.assets.cache
 obj/Release/net6.0/cnpz-downloader.csproj.AssemblyReference.cache
 obj/Release/net6.0/cnpz-downloader.GeneratedMSBuildEditorConfig.editorconfig
 obj/Release/net6.0/cnpz-downloader.GlobalUsings.g.cs
+/bin/Debug/net6.0
