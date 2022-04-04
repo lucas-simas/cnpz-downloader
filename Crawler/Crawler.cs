@@ -17,8 +17,9 @@ namespace cnpz_downloader.Crawler
 
             var doc = web.Load(url);
             var links = doc.DocumentNode.SelectNodes("//a[@href]");
-            var regex_download = new Regex(@"(\S*)\.(\S*)\.(D\w*)\.(\S*).((.zip)|(.ZIP))");
-            var pasta_criada = false;
+			//var regex_download = new Regex(@"(\S*)\.(\S*)\.(D\w*)\.(\S*).((.zip)|(.ZIP))");
+			var regex_download = new Regex(@"(.*)((.pdf)|(.PDF))");
+			var pasta_criada = false;
             string pasta_nome = "";
             List<Task> tasks = new List<Task>();
 
@@ -32,7 +33,7 @@ namespace cnpz_downloader.Crawler
                         var reg_info = regex_download.Matches(link.Attributes["href"].Value);
 						if ( !pasta_criada && reg_info.Count > 0 && reg_info[0].Groups.Count > 3 ) {
                             var grupos = reg_info[0].Groups;
-                            var agrupador = reg_info[0].Groups[3].Value;
+                            var agrupador = grupos[3].Value;
                             pasta_nome = agrupador;
                             path += agrupador + @"\";
 
@@ -41,11 +42,23 @@ namespace cnpz_downloader.Crawler
                             }
                             pasta_criada = true;
                         }
+                        //Else para teste ou resultado desconhecido
+                        else if (!pasta_criada) {
+                            var agrupador = "testeira";
+                            pasta_nome = agrupador;
+                            path += agrupador + @"\";
+
+                            if (!Directory.Exists(path))
+                            {
+                                Directory.CreateDirectory(path);
+                            }
+                            pasta_criada = true;
+                        }
 
                         Console.WriteLine("Iniciou: " + url + link.Attributes["href"].Value + " - Salvando: " + path);
                         var arquivo_atual = url + link.Attributes["href"].Value;
 
-                        var fd = new FileDownload(arquivo_atual, path + link.Attributes["href"].Value, 20000);
+                        var fd = new FileDownload(arquivo_atual, path + link.Attributes["href"].Value, 1024);
                         tasks.Add(fd.Start());
                     }
 
@@ -60,7 +73,9 @@ namespace cnpz_downloader.Crawler
             await Task.WhenAll(tasks);
 
 			Producer.SendKafka("downloader", pasta_nome);
-		}
+
+            Console.WriteLine("Sucesso: " + pasta_nome);
+        }
 
     }
 
