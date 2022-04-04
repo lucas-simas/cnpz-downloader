@@ -17,8 +17,8 @@ namespace cnpz_downloader.Crawler
 
             var doc = web.Load(url);
             var links = doc.DocumentNode.SelectNodes("//a[@href]");
-			//var regex_download = new Regex(@"(\S*)\.(\S*)\.(D\w*)\.(\S*).((.zip)|(.ZIP))");
-			var regex_download = new Regex(@"(.*)((.pdf)|(.PDF))");
+			var regex_download = new Regex(@"(\S*)\.(\S*)\.(D\w*)\.(\S*).((.zip)|(.ZIP))");
+			//var regex_download = new Regex(@"(.*)((.pdf)|(.PDF))");
 			var pasta_criada = false;
             string pasta_nome = "";
             List<Task> tasks = new List<Task>();
@@ -58,7 +58,7 @@ namespace cnpz_downloader.Crawler
                         Console.WriteLine("Iniciou: " + url + link.Attributes["href"].Value + " - Salvando: " + path);
                         var arquivo_atual = url + link.Attributes["href"].Value;
 
-                        var fd = new FileDownload(arquivo_atual, path + link.Attributes["href"].Value, 1024);
+                        var fd = new FileDownload(arquivo_atual, path + link.Attributes["href"].Value, 20000);
                         tasks.Add(fd.Start());
                     }
 

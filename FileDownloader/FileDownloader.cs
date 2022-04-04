@@ -87,8 +87,8 @@ namespace cnpz_downloader.FileDownloader
                         while (_allowedToRun)
                         {
                             var chunkFaltante = ContentLength - BytesWritten;
-                            var buffer = new byte[chunkFaltante < _chunkSize ? chunkFaltante : _chunkSize];
-                            var bytesRead = await responseStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
+							var buffer = new byte[chunkFaltante < _chunkSize ? chunkFaltante : _chunkSize];
+							var bytesRead = await responseStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
 
                             if (bytesRead == 0) break;
 
