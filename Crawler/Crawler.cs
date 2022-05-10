@@ -72,7 +72,12 @@ namespace cnpz_downloader.Crawler
 
             await Task.WhenAll(tasks);
 
-			Producer.SendKafka("downloader", pasta_nome);
+            try {
+                Producer.SendKafka("downloader", pasta_nome);
+            }
+            catch (Exception) {
+                Console.WriteLine("Erro ao usar KAFKA");
+            }
 
             Console.WriteLine("Sucesso: " + pasta_nome);
         }
